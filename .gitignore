@@ -1,0 +1,24 @@
+# ---- third-party / external ----
+external/
+
+# ---- tool & session state ----
+.zcode/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# ---- LaTeX build artifacts (keep .tex/.bib/.cls/.bbl/.bst and final PDFs) ----
+*.aux
+*.log
+*.out
+*.blg
+*.synctex.gz
+*.toc
+
+# ---- backups (git history supersedes them) ----
+*.bak*
+paper/figs_final_orig_20261108/
+paper/main.pdf.bak*
+
+# ---- unrelated assets from other projects ----
+paper/figures4papers/

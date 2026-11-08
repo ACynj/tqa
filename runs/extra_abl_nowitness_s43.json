@@ -1,0 +1,35 @@
+{
+  "ckpt": "/mnt/ssd/tqa/runs/abl_nowitness_s43.pt",
+  "ops": "gated",
+  "graph": "fb15k237",
+  "collision_2i": [
+    {
+      "bucket": 0,
+      "cos_lo": 0.127,
+      "cos_hi": 0.606,
+      "MRR": 0.0448,
+      "n": 75
+    },
+    {
+      "bucket": 1,
+      "cos_lo": 0.606,
+      "cos_hi": 0.793,
+      "MRR": 0.124,
+      "n": 75
+    },
+    {
+      "bucket": 2,
+      "cos_lo": 0.795,
+      "cos_hi": 0.894,
+      "MRR": 0.094,
+      "n": 76
+    },
+    {
+      "bucket": 3,
+      "cos_lo": 0.894,
+      "cos_hi": 1.0,
+      "MRR": 0.9189,
+      "n": 74
+    }
+  ]
+}
