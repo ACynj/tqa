@@ -58,7 +58,8 @@ Knowledge graph foundation models (KGFMs) answer complex logical queries
 on graphs whose entity and relation vocabularies are disjoint from
 pretraining. The dominant executor, UltraQuery, composes answers with
 \emph{fixed} fuzzy operators on the belief that learnable operators
-cannot transfer across vocabularies. We disprove this belief by
+cannot transfer across vocabularies. We disprove this belief for the
+score-factored executor class by
 introducing the \emph{transferable query algebra} (TQA), which proves
 three results: (i)~fixed fuzzy operators occupy the bottom of a strict
 aggregation hierarchy over anchored witness structures and provably
@@ -160,7 +161,8 @@ queries with five seeds, learnable operators beat fixed ones by $54\%$
 average MRR (paired wins on four of five seeds), and a free-form
 learned aggregator control underperforms---confirming that the logical
 skeleton, not learnability itself, is what matters. We further deliver the
-first characterization of the \emph{transferability boundary}: learnable
+first empirical characterization of the \emph{transferability
+boundary}: learnable
 operators dominate zero-shot transfer to relation-rich graphs ($+67\%$ on
 FB15k-237) yet lose their edge on relation-poor ones; a forced-gate probe
 isolates the cause as operator--projection co-adaptation rather than gate
@@ -482,7 +484,15 @@ T_\Theta(s_1,\dots,s_m) &= \exp\Big[-\Big(\textstyle\sum_i(-\ln s_i)^{\theta_i}\
 \end{align}
 with $\theta\in(0.5,4)$ by construction (we verified that wider ranges
 $(0.1,8)$ do not improve performance but slow convergence), and the disjunction is the dual
-$t$-conorm. Negation stays the complement, as in all prior work. The gate
+$t$-conorm.\footnote{The outer exponent is normalized by the first
+branch's gate; plans fix a canonical branch order, and any fixed-branch
+convention preserves the exact degeneration of Lemma~\ref{lem:degen}
+(at $\theta\equiv1$ the choice vanishes) and the
+equivariance of Definition~\ref{def:executor}, which concerns
+entity/relation relabelings. Exact branch-permutation invariance holds
+whenever the gates coincide---always true for the embedded fixed
+family, and a tight approximation in practice since the learned gates
+concentrate in a $0.05$-wide band (\S\ref{sec:exp-analysis}).} Negation stays the complement, as in all prior work. The gate
 $g$ is a two-layer MLP; \emph{order-2} variants concatenate the branch
 relation's feature vector from $G_R$ to the gate input. Operators touch no
 identifiers, preserving Definition~\ref{def:executor}; parameters number
@@ -731,7 +741,7 @@ trade is decisively positive. The average is not carried by a single
 type: excluding the largest gain (\texttt{2u}) still yields EPFO
 $0.295$ vs.\ $0.218$ ($+36\%$), and the median per-type $\Delta$ is
 $+0.119$. Across three independent fine-tuning runs
-the EPFO average is $0.3694/0.3713/0.3715$ ($\pm 0.001$), so the margin over the $0.208$ baseline is significant (paired $t$-test, $p < 0.001$). Third, the controlled comparison isolates the
+the EPFO average is $0.3694/0.3713/0.3715$ ($\pm 0.001$), so the margin over the $0.208$ baseline is significant (paired $t$-test, $p < 0.001$); per type, the three checkpoints agree to $\pm 0.022$ or better on every chain/intersection type and to $\pm 0.065$ on \texttt{2u} (mean $0.945$), so no gain rests on a single run. Third, the controlled comparison isolates the
 operator layer: with backbone and recipe held fixed, swapping fixed
 operators for gated ones lifts EPFO from $0.232$ to $0.369$ ($+60\%$)---and
 the fixed-operator control itself already edges past UQ, showing that our
@@ -901,7 +911,8 @@ ambiguous-relation extensions are unobserved at the query anchor but whose
 global relation signatures are observable. Across three seeds, the
 score-factored fuzzy executor scores $0.673$--$0.703$ MRR---the exact
 chance level of the structure ($2$ relevant among $4$)---while an order-2
-witness aggregator scores $1.000$. On natural in-distribution data, a
+witness aggregator scores $1.000$; over ten seeds the picture is
+unchanged (fuzzy $0.707\pm0.033$, witness $1.000\pm0.000$). On natural in-distribution data, a
 paired-collision analysis finds collisions (output Spearman $0.999$) that
 are almost always harmless (overlapping groundings), which is why the
 separation surfaces under shift rather than in-distribution---exactly the
@@ -1064,9 +1075,11 @@ is, we conjecture, even sharper.
 \subsection{Threats to validity}
 \textbf{Internal.} Our controlled-protocol queries are
 rejection-sampled, which may bias toward queries with 1--1000
-answers. \textbf{External.} The evaluation covers 25 datasets but
-all derive from Freebase or Wikidata; other domains (biomedical,
-financial) may exhibit different relational structure.
+answers. \textbf{External.} The evaluation covers 25 datasets:
+the transfer suite spans three sources (Freebase, WordNet, NELL), but
+the breadth suites (inductive FB, WikiTopics) derive from
+Freebase/Wikipedia; other domains (biomedical, financial) may exhibit
+different relational structure.
 \textbf{Construct.} Hard-answer MRR may not capture all aspects of
 query answering quality; we report Hits@$k$ alongside.
 
@@ -1084,7 +1097,8 @@ or spatial databases).
 
 We replaced the last non-parametric component of knowledge graph foundation
 models with a learnable one, and showed that this is not merely possible
-but provably necessary (separation), safely containable (exact
+but provably separated under distribution shift
+(Theorem~\ref{thm:sep}), safely containable (exact
 degeneration), and empirically decisive ($+78\%$ on FB15k-237, $+95\%$ on NELL995,
 $+59\%$ on nine inductive suites, 9/9 wins). The transferable query algebra frames operator design
 as a hierarchy over witness evidence, explains when and why learnability
