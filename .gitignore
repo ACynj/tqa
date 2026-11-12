@@ -1,24 +1,19 @@
-# ---- third-party / external ----
-external/
+# Paper (not for upload)
+paper/
 
-# ---- tool & session state ----
-.zcode/
+# Large data (regenerable from scripts)
+data/
+external/
+runs/
+logs/
+
+# Python
 __pycache__/
 *.pyc
-.ipynb_checkpoints/
+*.egg-info/
+.env
 
-# ---- LaTeX build artifacts (keep .tex/.bib/.cls/.bbl/.bst and final PDFs) ----
-*.aux
-*.log
-*.out
-*.blg
-*.synctex.gz
-*.toc
-
-# ---- backups (git history supersedes them) ----
-*.bak*
-paper/figs_final_orig_20261108/
-paper/main.pdf.bak*
-
-# ---- unrelated assets from other projects ----
-paper/figures4papers/
+# OS
+.DS_Store
+Thumbs.db
+.zcode/
